@@ -1,0 +1,44 @@
+name: Auto Update Chnroute RSC
+
+# 触发条件：
+# 1. 每天北京时间凌晨 4 点 (UTC 20:00)
+# 2. 手动点击按钮触发 (workflow_dispatch)
+on:
+  schedule:
+    - cron: '0 20 * * *'
+  workflow_dispatch:
+
+# 赋予写权限，以便将生成的文件推送到仓库
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download and Convert
+        run: |
+          # 1. 写入头部信息，定义 Address List 路径
+          echo "/ip firewall address-list" > chnroute.rsc
+          
+          # 2. (可选) 加入清空旧列表的命令，防止重复
+          # 如果你不希望自动清空，可以删除下面这一行
+          echo "remove [find list=CN]" >> chnroute.rsc
+          
+          # 3. 下载 txt 并通过 sed 命令转换为 ROS 格式
+          # 格式说明：将每行 IP 前加 "add address="，后加 " list=CN"
+          curl -s https://raw.githubusercontent.com/mayaxcn/china-ip-list/refs/heads/master/chnroute.txt | \
+          sed -e 's/^/add address=/' -e 's/$/ list=CN/' >> chnroute.rsc
+
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git add chnroute.rsc
+          # 如果文件没有变化，commit 会失败，所以加上 || exit 0 防止报错
+          git commit -m "Auto-update chnroute.rsc from upstream" || exit 0
+          git push
