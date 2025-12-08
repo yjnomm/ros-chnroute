@@ -27,12 +27,12 @@ jobs:
           
           # 2. (可选) 加入清空旧列表的命令，防止重复
           # 如果你不希望自动清空，可以删除下面这一行
-          echo "remove [find list=CN]" >> chnroute.rsc
+          echo "remove [find list=novpn]" >> chnroute.rsc
           
           # 3. 下载 txt 并通过 sed 命令转换为 ROS 格式
-          # 格式说明：将每行 IP 前加 "add address="，后加 " list=CN"
+          # 格式说明：将每行 IP 前加 "add address="，后加 " list=novpn"
           curl -s https://raw.githubusercontent.com/mayaxcn/china-ip-list/refs/heads/master/chnroute.txt | \
-          sed -e 's/^/add address=/' -e 's/$/ list=CN/' >> chnroute.rsc
+          sed -e 's/^/add address=/' -e 's/$/ list=novpn/' >> chnroute.rsc
 
       - name: Commit and Push changes
         run: |
