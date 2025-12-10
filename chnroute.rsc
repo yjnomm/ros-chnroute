@@ -1,6 +1,6 @@
 /ip firewall address-list
 remove [find list=novpn]
-add address=192.168.1.0/24 list=novpn comment="Local LAN CIDR, must not go to proxy"
+add address=192.168.0.0/24 list=novpn comment="Local LAN CIDR, must not go to proxy"
 add address=1.0.1.0/24 list=novpn
 add address=1.0.2.0/23 list=novpn
 add address=1.0.8.0/21 list=novpn
@@ -3970,7 +3970,6 @@ add address=103.154.162.0/23 list=novpn
 add address=103.154.164.0/23 list=novpn
 add address=103.154.168.0/23 list=novpn
 add address=103.155.14.0/23 list=novpn
-add address=103.155.16.0/23 list=novpn
 add address=103.155.34.0/23 list=novpn
 add address=103.155.48.0/23 list=novpn
 add address=103.155.76.0/23 list=novpn
@@ -3999,7 +3998,6 @@ add address=103.158.74.0/23 list=novpn
 add address=103.158.190.0/23 list=novpn
 add address=103.158.200.0/23 list=novpn
 add address=103.158.224.0/23 list=novpn
-add address=103.159.80.0/23 list=novpn
 add address=103.159.122.0/23 list=novpn
 add address=103.159.124.0/23 list=novpn
 add address=103.159.134.0/23 list=novpn
