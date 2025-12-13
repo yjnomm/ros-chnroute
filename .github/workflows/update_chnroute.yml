@@ -28,17 +28,8 @@ jobs:
           # 2. (可选) 加入清空旧列表的命令，防止重复
           # 如果你不希望自动清空，可以删除下面这一行
           echo "remove [find list=novpn]" >> chnroute.rsc
-
-          # 3. 手动加入内网地址到 novpn 列表
-          echo "add address=192.168.0.0/16 list=novpn comment=\"Local LAN CIDR, must not go to proxy\"" >> chnroute.rsc
-          
-          # 4. 添加 172.16.0.0/12 地址段到 novpn 列表
-          echo "add address=172.16.0.0/12 list=novpn comment=\"RFC 1918 Private Block - 172.16.0.0/12\"" >> chnroute.rsc
-
-          # 5. 添加 10.0.0.0/8 地址段到 novpn 列表
-          echo "add address=10.0.0.0/8 list=novpn comment=\"RFC 1918 Private Block - 10.0.0.0/8\"" >> chnroute.rsc
-          
-          # 6. 下载 txt 并通过 sed 命令转换为 ROS 格式
+         
+          # 3. 下载 txt 并通过 sed 命令转换为 ROS 格式
           # 格式说明：将每行 IP 前加 "add address="，后加 " list=novpn"
           curl -s https://raw.githubusercontent.com/mayaxcn/china-ip-list/master/chnroute.txt | \
           sed -e 's/^/add address=/' -e 's/$/ list=novpn/' >> chnroute.rsc
