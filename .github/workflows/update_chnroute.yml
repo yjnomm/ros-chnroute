@@ -1,14 +1,14 @@
 name: Auto Update Chnroute RSC
 
 # 触发条件：
-# 1. 每天北京时间凌晨 4 点 (UTC 20:00)
+# 1. 每天北京时间凌晨 4 点 (UTC 20:00) 自动运行
 # 2. 手动点击按钮触发 (workflow_dispatch)
 on:
   schedule:
     - cron: '0 20 * * *'
   workflow_dispatch:
 
-# 赋予写权限，以便将生成的文件推送到仓库
+# 权限：赋予写入权限，以便将生成的文件推送到仓库
 permissions:
   contents: write
 
@@ -20,16 +20,38 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Download and Convert
+      - name: Download and Convert Chnroute
         run: |
-          # 1. 写入头部信息，定义 Address List 路径
+          # ----------------------------------------------------
+          # 1. 初始化 RSC 文件并写入头部信息
+          # ----------------------------------------------------
           echo "/ip firewall address-list" > chnroute.rsc
           
-          # 2. (可选) 加入清空旧列表的命令，防止重复
-          # 如果你不希望自动清空，可以删除下面这一行
+          # 2. 清空旧列表：先移除所有旧的 novpn 列表，确保数据是最新的
           echo "remove [find list=novpn]" >> chnroute.rsc
-         
-          # 3. 下载 txt 并通过 sed 命令转换为 ROS 格式
+          
+          # ----------------------------------------------------
+          # 3. 添加本地和保留 IP 地址段 (排除项)
+          # ----------------------------------------------------
+          
+          # 3A. 排除 OpenWrt 网关 IP (必不可少，防止路由回环)
+          # 假设您的 OpenWrt IP 是 192.68.1.2
+          echo "add address=192.68.1.2/32 list=novpn comment=\"Exclude_OpenWrt_Gateway\"" >> chnroute.rsc
+
+          # 3B. 排除本地环回地址 (Loopback)
+          echo "add address=127.0.0.0/8 list=novpn comment=\"Exclude_Loopback\"" >> chnroute.rsc
+          
+          # 3C. 排除 RFC 1918 私有 IP 地址块
+          echo "add address=10.0.0.0/8 list=novpn comment=\"RFC 1918 Private Block - 10.0.0.0/8\"" >> chnroute.rsc
+          echo "add address=172.16.0.0/12 list=novpn comment=\"RFC 1918 Private Block - 172.16.0.0/12\"" >> chnroute.rsc
+          echo "add address=192.168.0.0/16 list=novpn comment=\"RFC 1918 Private Block - 192.168.0.0/16\"" >> chnroute.rsc
+          
+          # 3D. 排除多播地址 (Multicast)
+          echo "add address=224.0.0.0/4 list=novpn comment=\"Exclude_Multicast\"" >> chnroute.rsc
+          
+          # ----------------------------------------------------
+          # 4. 下载 chnroute.txt 并转换为 ROS 格式
+          # ----------------------------------------------------
           # 格式说明：将每行 IP 前加 "add address="，后加 " list=novpn"
           curl -s https://raw.githubusercontent.com/mayaxcn/china-ip-list/master/chnroute.txt | \
           sed -e 's/^/add address=/' -e 's/$/ list=novpn/' >> chnroute.rsc
