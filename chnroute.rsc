@@ -6231,6 +6231,7 @@ add address=151.158.14.0/23 list=novpn
 add address=151.158.72.0/23 list=novpn
 add address=151.158.78.0/23 list=novpn
 add address=151.158.80.0/23 list=novpn
+add address=151.158.122.0/23 list=novpn
 add address=152.104.128.0/17 list=novpn
 add address=152.136.0.0/16 list=novpn
 add address=153.0.0.0/16 list=novpn
