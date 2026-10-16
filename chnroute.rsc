@@ -6630,6 +6630,7 @@ add address=192.140.200.0/22 list=novpn
 add address=192.140.204.0/22 list=novpn
 add address=192.140.208.0/22 list=novpn
 add address=192.140.212.0/22 list=novpn
+add address=192.140.244.0/23 list=novpn
 add address=192.144.128.0/17 list=novpn
 add address=192.197.113.0/24 list=novpn
 add address=192.232.34.0/23 list=novpn
