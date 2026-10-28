@@ -110,6 +110,7 @@ add address=27.50.128.0/17 list=novpn
 add address=27.54.72.0/21 list=novpn
 add address=27.54.152.0/21 list=novpn
 add address=27.54.192.0/18 list=novpn
+add address=27.98.202.0/23 list=novpn
 add address=27.98.208.0/20 list=novpn
 add address=27.98.224.0/19 list=novpn
 add address=27.99.128.0/17 list=novpn
