@@ -6135,6 +6135,7 @@ add address=140.249.0.0/16 list=novpn
 add address=140.250.0.0/16 list=novpn
 add address=140.255.0.0/16 list=novpn
 add address=141.229.14.0/23 list=novpn
+add address=141.229.20.0/23 list=novpn
 add address=142.86.0.0/16 list=novpn
 add address=143.64.0.0/16 list=novpn
 add address=144.0.0.0/16 list=novpn
